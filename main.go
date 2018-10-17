@@ -1,12 +1,12 @@
 package main
 
 import (
-	"github.com/Algorithm/FPTree"
 	"fmt"
-	"github.com/Algorithm/LIS"
+	"github.com/Algorithm/FPTree"
+	"github.com/Algorithm/Sequence"
 )
 
-func FPTreeTest(){
+func FPTreeTest() {
 	trans := [][]string{{"a", "b", "c", "d", "e", "f", "g", "h"},
 		{"b", "d", "e", "f", "j"},
 		{"a", "f", "g"},
@@ -29,14 +29,32 @@ func FPTreeTest(){
 	return
 }
 
-func LISTest(){
-	input := []int{10,22,9,33,21,50,41,47,60,80}
-	nLis, lis := LIS.GetLIS(input)
+func LISTest() {
+	input := []int{10, 22, 9, 33, 21, 50, 41, 47, 60, 80}
+	nLis, lis := Sequence.GetLIS(input)
 	fmt.Printf("The max length of increasing sub-sequence: %d\n", nLis)
-	fmt.Printf("The LIS is %v", lis)
+	fmt.Printf("The Sequence is %v", lis)
+	return
+}
+
+func LCCSTest() {
+	a := []int{1, 3, 5, 6, 7}
+	b := []int{3, 5, 7}
+	lccs := Sequence.GetLCCS(a, b)
+	fmt.Printf("The longest continuous common subsequence is %v", lccs)
+	return
+}
+
+func LCSTest() {
+	a := []int{1, 3, 5, 6, 7}
+	b := []int{3, 4, 5, 7, 9}
+	lcs := Sequence.GetLCS(a, b)
+	fmt.Printf("The longest common subsequence is %v", lcs)
 	return
 }
 
 func main() {
-	LISTest()
+	// LISTest()
+	//LCCSTest()
+	LCSTest()
 }

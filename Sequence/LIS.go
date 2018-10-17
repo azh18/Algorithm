@@ -1,4 +1,4 @@
-package LIS
+package Sequence
 
 type Elem struct{
 	Idx int
@@ -50,7 +50,7 @@ func GetLIS(input []int) (nLIS int, LIS []int){
 		}
 	}
 	nLIS = nEnd
-	// get LIS by rescan
+	// get Sequence by rescan
 	lisRevert := make([]int, 0)
 	lisRevert = append(lisRevert, end[nEnd-1].Val)
 	ancestorIdx := ancestor[end[nEnd-1].Idx].Idx

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/Algorithm/FPTree"
 	"github.com/Algorithm/Sequence"
+	"github.com/Algorithm/Sort"
 )
 
 func FPTreeTest() {
@@ -53,8 +54,16 @@ func LCSTest() {
 	return
 }
 
+func HeapSortTest(){
+	input := []int{10, 22, 9, 33, 21, 50, 41, 47, 60, 80}
+	sorted := Sort.HeapSort(input)
+	fmt.Printf("the sorted slice is %v\n", sorted)
+	return
+}
+
 func main() {
 	// LISTest()
 	//LCCSTest()
-	LCSTest()
+	//LCSTest()
+	HeapSortTest()
 }

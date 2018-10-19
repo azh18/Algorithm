@@ -1,5 +1,6 @@
 #include <cstdio>
 #include<stack>
+#include<vector>
 
 using namespace std;
 
@@ -102,7 +103,6 @@ class AVLTree{
                 p1->rightHeight = getHeight(p1->right);
                 p = p1;
             }
-
         }
 
         this->root = this->maintainAvg(this->root);
@@ -110,6 +110,86 @@ class AVLTree{
     }
 
     void remove(Node<T> *node){
+        // delete BST node and rebalance the nodes on the trace until the subroot
+        Node<T> *subroot = node, *p = this->root, *subrootFather = NULL;
+        if(node == this->root){
+            this->root = NULL;
+            return;
+        }
+        stack<Node<T>* > s;
+        while(p!=NULL && p!=node){
+            s.push(p);
+            if(node->val > p->val){
+                if(p->right == node){
+                    subrootFather = p;
+                }
+                p = p->right;
+            } else {
+                if(p->left == node){
+                    subrootFather = p;
+                }
+                p = p->left;
+            }
+        }
+        // find the leftest on the right tree
+        Node<T> *p1 = subroot->right, *p1Father = subroot;
+        s.push(subroot);
+        if(p1 != NULL){
+            if(p1->left == NULL){
+                subroot->val = p1->val;
+                p1Father->right = p1->right;
+                p1Father->rightHeight = getHeight(p1Father->right);
+                free(p1);
+            } else {
+                while(p1->left != NULL){
+                    s.push(p1);
+                    p1Father = p1;
+                    p1 = p1->left;
+                }
+                subroot->val = p1->val;
+                p1Father->left = p1->right;
+                p1Father->leftHeight = getHeight(p1Father->left);
+                free(p1);
+            }
+        } else {
+            if(subroot->left != NULL){
+                Node<T> *pLeft = subroot->left;
+                subroot->val = pLeft->val;
+                subroot->left = pLeft->left;
+                subroot->right = pLeft->right;
+                subroot->leftHeight = getHeight(subroot->left);
+                subroot->rightHeight = getHeight(subroot->right);
+                free(pLeft);
+            } else {
+                if(subrootFather->left == subroot){
+                    subrootFather->left = NULL;
+                    subrootFather->leftHeight = 0;
+                } else {
+                    subrootFather->right = NULL;
+                    subrootFather->rightHeight = 0;
+                }
+                free(subroot);
+                s.pop();
+            }
+        }
+        // fix height number and fix average
+        Node<T> *p2 = NULL, *p2Father = NULL, *p2New = NULL;
+        while(!s.empty()){
+            p2Father = s.top();
+            s.pop();
+            if(p2New != NULL){
+                if(p2Father->left == p2){
+                    p2Father->left = p2New;
+                } else {
+                    p2Father->right = p2New;
+                }
+            }
+            p2 = p2Father;
+            p2->leftHeight = getHeight(p2->left);
+            p2->rightHeight = getHeight(p2->right);
+            p2New = maintainAvg(p2);
+        }
+        this->root = p2New;
         return;
     }
 
@@ -173,6 +253,31 @@ class AVLTree{
         }
         return root;
     }
+    vector<T> traverse(){
+        vector<T> res;
+        stack<Node<T> *> s;
+        Node<T> *p = this->root;
+        if(p==NULL){
+            return res;
+        }
+        while(p->left != NULL){
+            s.push(p);
+            p = p->left;
+        }
+        res.push_back(p->val);
+        while(!s.empty()){
+            Node<T> *newroot = s.top();
+            s.pop();
+            res.push_back(newroot->val);
+            p = newroot->right;
+            while(p!=NULL){
+                s.push(p);
+                p = p->left;
+            }
+        }
+        return res;
+    } 
+    
 };
 
 
@@ -180,7 +285,13 @@ int main(){
     printf("hello world.\n");
     int a[10] = {1,4,2,3,5,6,8,10,7,9};
     AVLTree<int> *tree = new AVLTree<int>(a, 10);
-    Node<int> *res = tree->find(5);
-    printf("%d, leftheight:%d, rightheight:%d\n", res->val, res->leftHeight, res->rightHeight);
+    Node<int> *res = tree->find(3);
+    tree->remove(res);
+    vector<int> res1 = tree->traverse();
+    printf("sorted:\n");
+    for(auto it = res1.begin(); it != res1.end(); it ++){
+        printf("%d ", *it);
+    }
+    // printf("%d, leftheight:%d, rightheight:%d\n", res->val, res->leftHeight, res->rightHeight);
     return 0;
 }

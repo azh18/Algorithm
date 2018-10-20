@@ -24,6 +24,18 @@ The LIS (Longest Increasing Subsequence, 最长递增子序列) Algorithm is a c
 
 Here we implement this algorithm with the O(nlogn) time complex.
 
+### LCS (Longest Common Subsequence，最长公共子序列)
+
+A dynamic programming based implementation.
+
+### LCCS(Longest Continent Common Subsequence，最长连续公共子序列)
+
+A dynamic programming based implementation.
+
+### AVL Tree
+
+AVL Tree is implemented by C++.
+
 ## Run algorithm
 
 Add the algorithm that you would like to run in the main function in ```main.go```. The algorithm handlers are named as ```<algorithm_name>Test()```.
